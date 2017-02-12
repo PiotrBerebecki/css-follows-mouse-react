@@ -1,3 +1,3 @@
-# css-follows-mouse-react
+### CSS Follows Mouse - React version
 
-hi
+Live version http://codepen.io/PiotrBerebecki/pen/zNMQJB.

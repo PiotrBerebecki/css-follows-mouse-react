@@ -1,0 +1,69 @@
+console.clear();
+
+
+class App extends React.Component {
+  constructor() {
+    super();
+    this.handleMouseMove = this.handleMouseMove.bind(this);
+    this.setImageCenter = this.setImageCenter.bind(this);
+    
+    this.state = {
+      rotation: 0,
+      xCenter: null,
+      yCenter: null
+    };
+  }
+  
+  componentDidMount() {
+    this.setImageCenter();
+    window.addEventListener('resize', this.setImageCenter);
+  }
+  
+  setImageCenter() {
+    const { image } = this.refs;
+
+    this.setState({
+      xCenter: image.offsetLeft + image.offsetWidth / 2,
+      yCenter: image.offsetTop + image.offsetHeight / 2
+    });
+  }
+  
+  handleMouseMove(event) {
+    const { nativeEvent: e } = event;
+    const { target } = e;
+    
+    let xMouse = e.offsetX;
+    let yMouse = e.offsetY;    
+    
+    if (target.className !== 'hero') {
+      [xMouse, yMouse] = [xMouse + target.offsetLeft, yMouse + target.offsetTop];
+    }
+    
+    const xDelta = xMouse - this.state.xCenter;
+    const yDelta = yMouse - this.state.yCenter;
+    
+    const rad = Math.atan2(xDelta, yDelta);
+    const deg = -1 * (rad * (180 / Math.PI));
+    this.setState({
+      rotation: deg
+    });
+  }
+  
+  render() {
+    return (
+      <div className="hero" onMouseMove={this.handleMouseMove}>
+        <div className="wrapper">
+          <h1>React</h1>
+          <img style={{ transform: `rotate(${this.state.rotation}deg` }}
+               ref="image"
+               src="https://raw.githubusercontent.com/PiotrBerebecki/graphics/master/react-logo-transparent.png" />
+        </div>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(
+  <App />,
+  document.getElementById('app')
+);
